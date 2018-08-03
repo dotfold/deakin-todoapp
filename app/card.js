@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Dimensions } from 'react-native'
+import { StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native'
 
 const { width } = Dimensions.get('window')
 const styles = StyleSheet.create({
@@ -9,8 +9,9 @@ const styles = StyleSheet.create({
     // flex: 1,
     width: width - 25,
     height: 185,
+    marginBottom: 35,
     borderRadius: 10,
-    shadowColor: '#ff7',
+    shadowColor: '#ccc',
     shadowOpacity: 0.8,
     shadowRadius: 10,
     shadowOffset: {
@@ -20,11 +21,13 @@ const styles = StyleSheet.create({
   }
 })
 
-const Card = ({ children }) => {
+const Card = ({ onTouch, children }) => {
   return (
-    <View style={styles.card}>
-      {children}
-    </View>
+    <TouchableOpacity onPress={() => onTouch()}>
+      <View style={styles.card}>
+        {children}
+      </View>
+    </TouchableOpacity>
   )
 }
 
