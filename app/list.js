@@ -22,6 +22,10 @@ const mockItems = {
 }
 
 class List extends React.Component {
+  static navigationOptions = {
+    title: 'Home Items',
+  };
+
   state = {
     itemIds: itemIds,
     items: mockItems,
