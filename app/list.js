@@ -1,56 +1,112 @@
 import React from 'react'
-import {
-  Dimensions,
-  ScrollView,
-  TouchableOpacity,
-  View,
-  Text,
-  StyleSheet
-} from 'react-native'
+import { ScrollView, View, Text, TextInput } from 'react-native'
+import { Item } from './item'
 
-const { width } = Dimensions.get('window')
-const styles = StyleSheet.create({
-  container: {
-    width: width - 50,
-    borderBottomColor: '#bbb',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: 20,
-    paddingRight: 20
+const itemIds = [1, 2, 3]
+const mockItems = {
+  1: {
+    id: 1,
+    text: 'persist the items',
+    completed: false
   },
-  text: {
-    fontWeight: '500',
-    fontSize: 18,
-    marginVertical: 20
+  2: {
+    id: 2,
+    text: 'add an item to the list',
+    completed: false
   },
-  circle: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    borderColor: 'red',
-    borderWidth: 3,
-    marginRight: 20
+  3: {
+    id: 3,
+    text: 'load and display the items',
+    completed: true
   }
-})
-
-const ListItems = () => {
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity>
-        <View style={styles.circle} />
-      </TouchableOpacity>
-      <Text style={styles.text}>Todo List will show here</Text>
-    </View>
-  )
 }
 
-const List = () => {
-  return (
-    <ScrollView>
-      <ListItems />
-    </ScrollView>
-  )
+class List extends React.Component {
+  state = {
+    itemIds: itemIds,
+    items: mockItems,
+    newItem: ''
+  }
+
+  getNextKey = () => {
+    return itemIds.length + 1
+  }
+
+  toggleItemStatus = item => {
+    item.completed ? this.uncompleteItem(item) : this.completeItem(item)
+  }
+
+  completeItem = item => {
+    this.setState(prev => ({
+      ...prev,
+      items: {
+        ...mockItems,
+        [item.id]: {
+          ...item,
+          completed: true
+        }
+      }
+    }))
+  }
+
+  uncompleteItem = item => {
+    this.setState(prev => ({
+      ...prev,
+      items: {
+        ...mockItems,
+        [item.id]: {
+          ...item,
+          completed: false
+        }
+      }
+    }))
+  }
+
+  addItem = event => {
+    const { newItem } = this.state
+    const nextId = this.getNextKey()
+    this.setState(prev => ({
+      ...prev,
+      newItem: '',
+      itemIds: prev.itemIds.concat(nextId),
+      items: {
+        ...prev.items,
+        [nextId]: {
+          id: nextId,
+          text: newItem,
+          completed: false
+        }
+      }
+    }))
+  }
+
+  storeNewItemText = text => {
+    console.log('store item text', text)
+    this.setState(prev => ({ ...prev, newItem: text }))
+  }
+
+  render () {
+    const { itemIds, items, newItem } = this.state
+    return (
+      <ScrollView>
+        <TextInput
+          autoCorrect={false}
+          placeholder='Add something!'
+          returnKeyType='done'
+          onChangeText={this.storeNewItemText}
+          onSubmitEditing={() => this.addItem()}
+          value={newItem}
+        />
+        {itemIds.map((id, index) => (
+          <Item
+            key={index}
+            item={items[id]}
+            onToggleComplete={this.toggleItemStatus}
+          />
+        ))}
+      </ScrollView>
+    )
+  }
 }
 
 export { List }
