@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, Dimensions } from 'react-native'
 
-import { Item } from './item'
+import { CardItem } from './card_item'
 import { Card } from './card'
 
 // TODO: use React Context API and have a Dimensions provider
@@ -37,10 +37,10 @@ class Home extends React.Component {
       <View style={styles.container}>
         <Text style={styles.title}>Welcome Home!</Text>
         <Card>
-          <Item title='Things you can do now!' />
+          <CardItem title='Things you can do now!' />
         </Card>
         <Card onTouch={() => navigation.navigate('List')}>
-          <Item title='List items for home' />
+          <CardItem title='List items for home' />
         </Card>
       </View>
     )
