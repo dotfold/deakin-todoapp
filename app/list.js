@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, View, Text, TextInput } from 'react-native'
+import { ScrollView, View, StyleSheet, Text, TextInput } from 'react-native'
 import { Item } from './item'
 
 const itemIds = [1, 2, 3]
@@ -21,10 +21,19 @@ const mockItems = {
   }
 }
 
+const styles = StyleSheet.create({
+  input: {
+    padding: 20,
+    borderBottomColor: '#bbb',
+    borderBottomWidth: 1,
+    fontSize: 24
+  }
+})
+
 class List extends React.Component {
   static navigationOptions = {
-    title: 'Home Items',
-  };
+    title: 'Home Items'
+  }
 
   state = {
     itemIds: itemIds,
@@ -94,6 +103,7 @@ class List extends React.Component {
     return (
       <ScrollView>
         <TextInput
+          style={styles.input}
           autoCorrect={false}
           placeholder='Add something!'
           returnKeyType='done'
