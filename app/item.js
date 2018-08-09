@@ -25,7 +25,7 @@ const text = {
 const { width } = Dimensions.get('window')
 const styles = StyleSheet.create({
   container: {
-    width: width - 50,
+    width: width,
     borderBottomColor: '#bbb',
     borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
