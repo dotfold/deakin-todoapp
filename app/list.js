@@ -1,25 +1,8 @@
 import React from 'react'
 import { ScrollView, View, StyleSheet, Text, TextInput } from 'react-native'
 import { Item } from './item'
-
-const itemIds = [1, 2, 3]
-const mockItems = {
-  1: {
-    id: 1,
-    text: 'persist the items',
-    completed: false
-  },
-  2: {
-    id: 2,
-    text: 'add an item to the list',
-    completed: false
-  },
-  3: {
-    id: 3,
-    text: 'load and display the items',
-    completed: true
-  }
-}
+import { generateId } from './hash'
+import { persist, retrieve } from './storage'
 
 const styles = StyleSheet.create({
   input: {
@@ -36,13 +19,26 @@ class List extends React.Component {
   }
 
   state = {
-    itemIds: itemIds,
-    items: mockItems,
-    newItem: ''
+    itemIds: [],
+    items: [],
+    newItem: '',
+    meta: {
+      update: false
+    }
   }
 
-  getNextKey = () => {
-    return itemIds.length + 1
+  async componentDidUpdate () {
+    const { items, itemIds, meta: { update } } = this.state
+    if (update) {
+      await persist(items, 'items')
+      this.setState(prevState => ({ ...prevState, meta: { update: false } }))
+    }
+  }
+
+  async componentDidMount () {
+    const rawItems = (await retrieve('items')) || '{}'
+    const items = JSON.parse(rawItems)
+    this.setState(() => ({ items, itemIds: Object.keys(items) }))
   }
 
   toggleItemStatus = item => {
@@ -53,11 +49,14 @@ class List extends React.Component {
     this.setState(prev => ({
       ...prev,
       items: {
-        ...mockItems,
+        ...prev.items,
         [item.id]: {
           ...item,
           completed: true
         }
+      },
+      meta: {
+        update: true
       }
     }))
   }
@@ -66,18 +65,21 @@ class List extends React.Component {
     this.setState(prev => ({
       ...prev,
       items: {
-        ...mockItems,
+        ...prev.items,
         [item.id]: {
           ...item,
           completed: false
         }
+      },
+      meta: {
+        update: true
       }
     }))
   }
 
   addItem = event => {
     const { newItem } = this.state
-    const nextId = this.getNextKey()
+    const nextId = generateId()
     this.setState(prev => ({
       ...prev,
       newItem: '',
@@ -87,19 +89,24 @@ class List extends React.Component {
         [nextId]: {
           id: nextId,
           text: newItem,
-          completed: false
+          completed: false,
+          visible: true
         }
+      },
+      meta: {
+        update: true
       }
     }))
   }
 
   storeNewItemText = text => {
     console.log('store item text', text)
-    this.setState(prev => ({ ...prev, newItem: text }))
+    this.setState(prev => ({ ...prev, newItem: text, meta: { update: false } }))
   }
 
   render () {
     const { itemIds, items, newItem } = this.state
+    console.log(itemIds, items)
     return (
       <ScrollView>
         <TextInput
@@ -111,13 +118,15 @@ class List extends React.Component {
           onSubmitEditing={() => this.addItem()}
           value={newItem}
         />
-        {itemIds.map((id, index) => (
-          <Item
-            key={index}
-            item={items[id]}
-            onToggleComplete={this.toggleItemStatus}
-          />
-        ))}
+        {itemIds
+          .filter(x => items[x].visible)
+          .map((id, index) => (
+            <Item
+              key={index}
+              item={items[id]}
+              onToggleComplete={this.toggleItemStatus}
+            />
+          ))}
       </ScrollView>
     )
   }
