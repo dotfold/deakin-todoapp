@@ -89,8 +89,7 @@ class List extends React.Component {
         [nextId]: {
           id: nextId,
           text: newItem,
-          completed: false,
-          visible: true
+          completed: false
         }
       },
       meta: {
@@ -100,13 +99,12 @@ class List extends React.Component {
   }
 
   storeNewItemText = text => {
-    console.log('store item text', text)
     this.setState(prev => ({ ...prev, newItem: text, meta: { update: false } }))
   }
 
   render () {
     const { itemIds, items, newItem } = this.state
-    console.log(itemIds, items)
+    const { navigation: { state: { routeName } } } = this.props
     return (
       <ScrollView>
         <TextInput
@@ -119,7 +117,21 @@ class List extends React.Component {
           value={newItem}
         />
         {itemIds
-          .filter(x => items[x].visible)
+          .filter(x => {
+            switch (routeName) {
+              case 'all':
+                return items[x]
+                break
+              case 'incomplete':
+                return !items[x].completed
+                break
+              case 'complete':
+                return items[x].completed
+                break
+              default:
+                return items[x]
+            }
+          })
           .map((id, index) => (
             <Item
               key={index}
