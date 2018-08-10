@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Text
 } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
 
 const circle = {
   width: 22,
@@ -19,7 +20,9 @@ const circle = {
 const text = {
   fontWeight: '500',
   fontSize: 18,
-  marginVertical: 20
+  marginVertical: 20,
+  flex: 1,
+  width: '100%'
 }
 
 const { width } = Dimensions.get('window')
@@ -44,6 +47,11 @@ const styles = StyleSheet.create({
     ...circle,
     borderColor: 'green',
     backgroundColor: 'green'
+  },
+  trash: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 })
 
@@ -55,6 +63,11 @@ const Item = ({ item, onToggleComplete }) => (
     <Text style={item.completed ? styles.completedText : styles.text}>
       {item.text}
     </Text>
+    <TouchableOpacity onPress={() => console.log('delete item')}>
+      <View style={styles.trash}>
+        <Ionicons name='ios-trash-outline' size={28} color='gray' />
+      </View>
+    </TouchableOpacity>
   </View>
 )
 
