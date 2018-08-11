@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Dimensions } from 'react-native'
+import { StyleSheet, Text, ScrollView, View, Dimensions } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
 import { CardItem } from './card_item'
@@ -12,7 +12,8 @@ const styles = StyleSheet.create({
   outer: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingTop: 30
+    paddingTop: 30,
+    height: '100%'
   },
   container: {
     flex: 1,
@@ -60,35 +61,37 @@ class Home extends React.Component {
   render () {
     const { navigation } = this.props
     return (
-      <View style={styles.outer}>
-        <View style={styles.titlesView}>
-          <Text style={styles.title}>Hey there!</Text>
-          <Text style={styles.tagline}>Looking for something to do?</Text>
+      <ScrollView style={{ backgroundColor: 'white' }}>
+        <View style={styles.outer}>
+          <View style={styles.titlesView}>
+            <Text style={styles.title}>Hey there!</Text>
+            <Text style={styles.tagline}>Looking for something to do?</Text>
+          </View>
+          <View style={styles.container}>
+            <Card>
+              <CardItem title='{x} items tagged at your current location' />
+              <View style={styles.icon}>
+                <Ionicons
+                  name='ios-locate'
+                  size={242}
+                  color='rgba(255, 255, 255, 0.7)'
+                />
+              </View>
+            </Card>
+            <Card onTouch={() => navigation.navigate('List')}>
+              <CardItem title='All your items' />
+              <View style={styles.icon}>
+                <Ionicons
+                  name='ios-list'
+                  size={242}
+                  style={{ right: 55 }}
+                  color='rgba(255, 255, 255, 0.7)'
+                />
+              </View>
+            </Card>
+          </View>
         </View>
-        <View style={styles.container}>
-          <Card>
-            <CardItem title='{x} items tagged at your current location' />
-            <View style={styles.icon}>
-              <Ionicons
-                name='ios-locate'
-                size={242}
-                color='rgba(255, 255, 255, 0.7)'
-              />
-            </View>
-          </Card>
-          <Card onTouch={() => navigation.navigate('List')}>
-            <CardItem title='All your items' />
-            <View style={styles.icon}>
-              <Ionicons
-                name='ios-list'
-                size={242}
-                style={{ right: 55 }}
-                color='rgba(255, 255, 255, 0.7)'
-              />
-            </View>
-          </Card>
-        </View>
-      </View>
+      </ScrollView>
     )
   }
 }
