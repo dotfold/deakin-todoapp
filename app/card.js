@@ -4,9 +4,8 @@ import { StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native'
 const { width } = Dimensions.get('window')
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#ccc',
+    backgroundColor: 'rgba(222, 222, 222, 0.48)',
     padding: 20,
-    // flex: 1,
     width: width - 25,
     height: 185,
     marginBottom: 35,
