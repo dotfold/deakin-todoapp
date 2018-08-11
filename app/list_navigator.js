@@ -15,9 +15,9 @@ const routeOptions = {
 
 const ListNavigator = createBottomTabNavigator(
   {
-    all: routeOptions,
-    incomplete: routeOptions,
-    complete: routeOptions
+    All: routeOptions,
+    Incomplete: routeOptions,
+    Complete: routeOptions
   },
   {
     navigationOptions: ({ navigation }) => ({
@@ -25,13 +25,13 @@ const ListNavigator = createBottomTabNavigator(
         const { routeName } = navigation.state
         let iconName
         switch (routeName) {
-          case 'all':
+          case 'All':
             iconName = 'ios-list'
             break
-          case 'incomplete':
+          case 'Incomplete':
             iconName = 'ios-albums-outline'
             break
-          case 'complete':
+          case 'Complete':
             iconName = 'ios-checkbox-outline'
         }
         return (
