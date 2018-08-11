@@ -105,7 +105,8 @@ class List extends React.Component {
       ...prev,
       itemIds: prev.itemIds.filter(x => x !== item.id),
       items: Object.keys(prev.items).reduce(
-        (x, y) => (+y !== +item.id ? { ...x, [y]: this.state.items[y] } : x),
+        (x, y) =>
+          (String(y) !== String(item.id) ? { ...x, [y]: prev.items[y] } : x),
         {}
       ),
       meta: { update: true }
