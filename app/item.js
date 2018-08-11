@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
   circle,
   completedCircle: {
     ...circle,
-    borderColor: 'green',
-    backgroundColor: 'green'
+    borderColor: 'rgba(41, 164, 103, 0.4)',
+    backgroundColor: 'rgba(41, 164, 103, 0.4)'
   },
   trash: {
     flex: 1,
