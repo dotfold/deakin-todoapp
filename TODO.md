@@ -1,5 +1,6 @@
 ### Features:
 
+- [ ] splash screen
 - [ ] home screen should scroll horizontal when in landscape
 - [ ] loading indicators
 
