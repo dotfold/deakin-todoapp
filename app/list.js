@@ -1,17 +1,8 @@
 import React from 'react'
 import { ScrollView, View, StyleSheet, Text, TextInput } from 'react-native'
 import { Item } from './item'
-import { generateId } from './hash'
 import { persist, retrieve } from './storage'
-
-const styles = StyleSheet.create({
-  input: {
-    padding: 20,
-    borderBottomColor: '#bbb',
-    borderBottomWidth: 1,
-    fontSize: 24
-  }
-})
+import { CreateItem } from './create_item'
 
 class List extends React.Component {
   static navigationOptions = {
@@ -22,7 +13,6 @@ class List extends React.Component {
   state = {
     itemIds: [],
     items: [],
-    newItem: '',
     meta: {
       update: false
     }
@@ -78,20 +68,13 @@ class List extends React.Component {
     }))
   }
 
-  addItem = event => {
-    const { newItem } = this.state
-    const nextId = generateId()
+  addItem = item => {
     this.setState(prev => ({
       ...prev,
-      newItem: '',
-      itemIds: prev.itemIds.concat(nextId),
+      itemIds: prev.itemIds.concat(item.id),
       items: {
         ...prev.items,
-        [nextId]: {
-          id: nextId,
-          text: newItem,
-          completed: false
-        }
+        [item.id]: item
       },
       meta: {
         update: true
@@ -111,24 +94,12 @@ class List extends React.Component {
     }))
   }
 
-  storeNewItemText = text => {
-    this.setState(prev => ({ ...prev, newItem: text, meta: { update: false } }))
-  }
-
   render () {
-    const { itemIds, items, newItem } = this.state
+    const { itemIds, items } = this.state
     const { navigation: { state: { routeName } } } = this.props
     return (
       <ScrollView>
-        <TextInput
-          style={styles.input}
-          autoCorrect={false}
-          placeholder='Add something!'
-          returnKeyType='done'
-          onChangeText={this.storeNewItemText}
-          onSubmitEditing={() => this.addItem()}
-          value={newItem}
-        />
+        <CreateItem onAddItem={this.addItem} />
         {itemIds
           .filter(x => {
             switch (routeName) {
