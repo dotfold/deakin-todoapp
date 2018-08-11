@@ -1,10 +1,17 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
+
+const styles = StyleSheet.create({
+  text: {
+    color: 'black',
+    fontSize: 24
+  }
+})
 
 const CardItem = ({ title }) => {
   return (
     <View>
-      <Text>{title}</Text>
+      <Text style={styles.text}>{title}</Text>
     </View>
   )
 }
