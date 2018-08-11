@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 
 const styles = StyleSheet.create({
   text: {
-    color: 'black',
+    color: 'rgba(250, 250, 250, 0.95)',
     fontSize: 24
   }
 })
