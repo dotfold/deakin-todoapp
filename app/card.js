@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   }
 })
 
-const Card = ({ onTouch, children }) => {
+const Card = ({ onTouch = () => void 0, children }) => {
   return (
     <TouchableOpacity onPress={() => onTouch()}>
       <View style={styles.card}>
