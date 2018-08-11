@@ -3,16 +3,13 @@ import { ScrollView, View, StyleSheet, Text, TextInput } from 'react-native'
 import { Item } from './item'
 import { persist, retrieve } from './storage'
 import { CreateItem } from './create_item'
+import { withinBounds } from './geo'
 
 class List extends React.Component {
-  static navigationOptions = {
-    title: 'Items',
-    header: 'Items'
-  }
-
   state = {
     itemIds: [],
     items: [],
+    taggedItemIds: [],
     meta: {
       update: false
     }
@@ -24,8 +21,6 @@ class List extends React.Component {
       await persist(items, 'items')
       this.setState(prevState => ({ ...prevState, meta: { update: false } }))
     }
-
-    console.log('update')
   }
 
   async componentDidMount () {
@@ -33,7 +28,26 @@ class List extends React.Component {
     const items = JSON.parse(rawItems)
     this.setState(() => ({ items, itemIds: Object.keys(items) }))
 
-    console.log('mount')
+    this.determineTaggedItems()
+  }
+
+  async determineTaggedItems () {
+    const rawItems = (await retrieve('items')) || '{}'
+    const items = JSON.parse(rawItems)
+
+    const pending = []
+    const pendingIds = []
+    for (let x in items) {
+      const inRange = await withinBounds(items[x])
+      if (inRange) {
+        pending.push(inRange)
+        pendingIds.push(x)
+      }
+    }
+
+    Promise.all(pending).then(res => {
+      this.setState(() => ({ taggedItemIds: pendingIds }))
+    })
   }
 
   toggleItemStatus = item => {
@@ -98,12 +112,8 @@ class List extends React.Component {
     }))
   }
 
-  // TODO:
-  // when the routeName is 'Tagged Here'
-  // will possibly need to move the filtering to componentDidMount?
-
   render () {
-    const { itemIds, items } = this.state
+    const { itemIds, items, taggedItemIds } = this.state
     const { navigation: { state: { routeName } } } = this.props
     return (
       <ScrollView>
@@ -119,6 +129,9 @@ class List extends React.Component {
                 break
               case 'Complete':
                 return items[x].completed
+                break
+              case 'Tagged Here':
+                return taggedItemIds.includes(x)
                 break
               default:
                 return items[x]
