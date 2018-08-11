@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   }
 })
 
-const Item = ({ item, onToggleComplete }) => (
+const Item = ({ item, onToggleComplete, onDeleteItem }) => (
   <View style={styles.container}>
     <TouchableOpacity onPress={() => onToggleComplete(item)}>
       <View style={item.completed ? styles.completedCircle : circle} />
@@ -63,7 +63,7 @@ const Item = ({ item, onToggleComplete }) => (
     <Text style={item.completed ? styles.completedText : styles.text}>
       {item.text}
     </Text>
-    <TouchableOpacity onPress={() => console.log('delete item')}>
+    <TouchableOpacity onPress={() => onDeleteItem(item)}>
       <View style={styles.trash}>
         <Ionicons name='ios-trash-outline' size={28} color='gray' />
       </View>

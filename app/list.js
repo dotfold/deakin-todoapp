@@ -15,7 +15,8 @@ const styles = StyleSheet.create({
 
 class List extends React.Component {
   static navigationOptions = {
-    title: 'Home Items'
+    title: 'Items',
+    header: 'Items'
   }
 
   state = {
@@ -98,6 +99,18 @@ class List extends React.Component {
     }))
   }
 
+  deleteItem = item => {
+    this.setState(prev => ({
+      ...prev,
+      itemIds: prev.itemIds.filter(x => x !== item.id),
+      items: Object.keys(prev.items).reduce(
+        (x, y) => (+y !== +item.id ? { ...x, [y]: this.state.items[y] } : x),
+        {}
+      ),
+      meta: { update: true }
+    }))
+  }
+
   storeNewItemText = text => {
     this.setState(prev => ({ ...prev, newItem: text, meta: { update: false } }))
   }
@@ -119,13 +132,13 @@ class List extends React.Component {
         {itemIds
           .filter(x => {
             switch (routeName) {
-              case 'all':
+              case 'All':
                 return items[x]
                 break
-              case 'incomplete':
+              case 'Incomplete':
                 return !items[x].completed
                 break
-              case 'complete':
+              case 'Complete':
                 return items[x].completed
                 break
               default:
@@ -137,6 +150,7 @@ class List extends React.Component {
               key={index}
               item={items[id]}
               onToggleComplete={this.toggleItemStatus}
+              onDeleteItem={this.deleteItem}
             />
           ))}
       </ScrollView>
