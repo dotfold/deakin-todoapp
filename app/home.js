@@ -83,7 +83,6 @@ class Home extends React.Component {
   }
 
   render () {
-    console.log('p', this.props)
     const { navigation } = this.props
     const { inRangeCount } = this.state
     const inRangeCountMessage = `${inRangeCount} items tagged at your current location`
