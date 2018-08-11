@@ -24,12 +24,16 @@ class List extends React.Component {
       await persist(items, 'items')
       this.setState(prevState => ({ ...prevState, meta: { update: false } }))
     }
+
+    console.log('update')
   }
 
   async componentDidMount () {
     const rawItems = (await retrieve('items')) || '{}'
     const items = JSON.parse(rawItems)
     this.setState(() => ({ items, itemIds: Object.keys(items) }))
+
+    console.log('mount')
   }
 
   toggleItemStatus = item => {
@@ -93,6 +97,10 @@ class List extends React.Component {
       meta: { update: true }
     }))
   }
+
+  // TODO:
+  // when the routeName is 'Tagged Here'
+  // will possibly need to move the filtering to componentDidMount?
 
   render () {
     const { itemIds, items } = this.state

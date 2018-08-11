@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, ScrollView, View, Dimensions } from 'react-native'
+import { NavigationActions } from 'react-navigation'
 import { Ionicons } from '@expo/vector-icons'
 
 import { CardItem } from './card_item'
@@ -82,6 +83,7 @@ class Home extends React.Component {
   }
 
   render () {
+    console.log('p', this.props)
     const { navigation } = this.props
     const { inRangeCount } = this.state
     const inRangeCountMessage = `${inRangeCount} items tagged at your current location`
@@ -94,7 +96,12 @@ class Home extends React.Component {
           </View>
           <View style={styles.container}>
             {inRangeCount > 0 &&
-              <Card>
+              <Card
+                onTouch={() =>
+                  navigation.dispatch(
+                    NavigationActions.navigate({ routeName: 'Tagged Here' })
+                  )}
+              >
                 <CardItem title={inRangeCountMessage} />
                 <View style={styles.icon}>
                   <Ionicons

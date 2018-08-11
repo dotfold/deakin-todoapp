@@ -17,7 +17,8 @@ const ListNavigator = createBottomTabNavigator(
   {
     All: routeOptions,
     Incomplete: routeOptions,
-    Complete: routeOptions
+    Complete: routeOptions,
+    'Tagged Here': routeOptions
   },
   {
     navigationOptions: ({ navigation }) => ({
@@ -33,6 +34,8 @@ const ListNavigator = createBottomTabNavigator(
             break
           case 'Complete':
             iconName = 'ios-checkbox-outline'
+          case 'Tagged Here':
+            iconName = 'ios-locate'
         }
         return (
           <Ionicons
