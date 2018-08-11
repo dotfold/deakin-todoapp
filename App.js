@@ -7,9 +7,14 @@ import { ListNavigator } from './app/list_navigator'
 // then move to home
 import { createStackNavigator } from 'react-navigation'
 
-const App = createStackNavigator({
-  Home: { screen: Home },
-  List: { screen: ListNavigator }
-})
+const App = createStackNavigator(
+  {
+    Home: { screen: Home },
+    List: { screen: ListNavigator, navigationOptions: { title: 'Items' } }
+  },
+  {
+    headerMode: 'float'
+  }
+)
 
 export default App
