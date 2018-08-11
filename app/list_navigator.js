@@ -4,7 +4,6 @@ import { createBottomTabNavigator, BottomTabBar } from 'react-navigation'
 import { List } from './list'
 
 const commonNavigationOptions = ({ navigation }) => ({
-  header: null,
   title: navigation.state.routeName
 })
 
