@@ -4,6 +4,8 @@ import { Ionicons } from '@expo/vector-icons'
 
 import { CardItem } from './card_item'
 import { Card } from './card'
+import { retrieve } from './storage'
+import { withinBounds } from './geo'
 
 // TODO: use React Context API and have a Dimensions provider
 // that propagates new dimensions from a change event
@@ -58,8 +60,31 @@ const styles = StyleSheet.create({
 
 class Home extends React.Component {
   static navigationOptions = { title: '', header: null }
+
+  state = {
+    inRangeCount: 0
+  }
+
+  async componentDidMount () {
+    const rawItems = (await retrieve('items')) || '{}'
+    const items = JSON.parse(rawItems)
+
+    const pending = []
+    for (let x in items) {
+      const inRange = await withinBounds(items[x])
+      pending.push(inRange)
+    }
+
+    Promise.all(pending).then(res => {
+      const inRangeCount = pending.reduce((acc, n) => (n ? ++acc : acc), 0)
+      this.setState(() => ({ inRangeCount }))
+    })
+  }
+
   render () {
     const { navigation } = this.props
+    const { inRangeCount } = this.state
+    const inRangeCountMessage = `${inRangeCount} items tagged at your current location`
     return (
       <ScrollView style={{ backgroundColor: 'white' }}>
         <View style={styles.outer}>
@@ -68,16 +93,17 @@ class Home extends React.Component {
             <Text style={styles.tagline}>Looking for something to do?</Text>
           </View>
           <View style={styles.container}>
-            <Card>
-              <CardItem title='{x} items tagged at your current location' />
-              <View style={styles.icon}>
-                <Ionicons
-                  name='ios-locate'
-                  size={242}
-                  color='rgba(255, 255, 255, 0.7)'
-                />
-              </View>
-            </Card>
+            {inRangeCount > 0 &&
+              <Card>
+                <CardItem title={inRangeCountMessage} />
+                <View style={styles.icon}>
+                  <Ionicons
+                    name='ios-locate'
+                    size={242}
+                    color='rgba(255, 255, 255, 0.7)'
+                  />
+                </View>
+              </Card>}
             <Card onTouch={() => navigation.navigate('List')}>
               <CardItem title='All your items' />
               <View style={styles.icon}>
