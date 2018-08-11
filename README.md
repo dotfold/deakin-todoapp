@@ -25,3 +25,7 @@ You must have node.js installed. Make sure it is Node 8.3 or newer.
 to run the project on the simulator:
 
 - npm run ios
+
+# License Disclaimer:
+
+See [DISCLAIMER.md](DISCLAIMER.md) for license information.
