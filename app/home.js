@@ -62,11 +62,16 @@ const styles = StyleSheet.create({
 class Home extends React.Component {
   static navigationOptions = { title: '', header: null }
 
+  constructor (props) {
+    super(props)
+    props.navigation.addListener('willFocus', this.refreshTaggedItems)
+  }
+
   state = {
     inRangeCount: 0
   }
 
-  async componentDidMount () {
+  refreshTaggedItems = async () => {
     const rawItems = (await retrieve('items')) || '{}'
     const items = JSON.parse(rawItems)
 
@@ -80,6 +85,10 @@ class Home extends React.Component {
       const inRangeCount = pending.reduce((acc, n) => (n ? ++acc : acc), 0)
       this.setState(() => ({ inRangeCount }))
     })
+  }
+
+  async componentDidMount () {
+    this.refreshTaggedItems()
   }
 
   render () {
