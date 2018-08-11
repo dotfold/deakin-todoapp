@@ -26,6 +26,10 @@ to run the project on the simulator:
 
 - npm run ios
 
+# Todo
+
+Features / Improvements / Fixes etc that would improve the quality and experience of the app are captured in [TODO.md](TODO.md).
+
 # License Disclaimer:
 
 See [DISCLAIMER.md](DISCLAIMER.md) for license information.
